@@ -1,0 +1,13 @@
+{{ define "AddTasks" }}
+<form id="add-task-section" class="task">
+  <input type="text" name="description">
+  <input type="datetime-local" name="due_date">
+  <select class="state" name="state">
+    <option value="not_started"></option>
+    <option value="started">\</option>
+    <option value="done">X</option>
+  </select>
+  <input type="text" name="tags">
+  <button hx-post="/add-task" hx-include="previous input[name='subject_id']">Agregar</button>
+</form>
+{{ end }}

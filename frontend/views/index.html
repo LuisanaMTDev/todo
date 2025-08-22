@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo</title>
+</head>
+
+<body>
+  <button class="add-subject" hx-get="/add-subject" hx-swap="afterend">+</button>
+  {{ range .Subjects }}
+  <details class="subjects">
+    <summary id="{{ .ID }}">
+      <p class="subject-name">{{ .Name }}</p>
+      <button class="add-task" hx-get="/add-task" hx-target="next ul" hx-swap="beforebegin">+</button>
+    </summary>
+    <input type="hidden" name="subject_id" value="{{ .ID }}">
+    <ul>
+      {{ $tasks := index $.TasksBySubject .ID }}
+      {{ range $tasks }}
+      <li class="task" id="{{ .ID }}">
+        <p class="task-description">{{ .Description }}</p>
+        <p class="due-date">Due date: {{ .DueDate.Format "02/01/2006 03:04 PM" }}</p>
+        <select class="state utils">
+          <option value="not_started" {{ if eq .State "not_started" }}selected{{end}}></option>
+          <option value="started" {{ if eq .State "started" }}selected{{end}}>\</option>
+          <option value="done" {{ if eq .State "done" }}selected{{end}}>X</option>
+        </select>
+        <span class="utils"><img src="/app/svg/pencil.svg" alt="Edit Task"></span>
+        <span><img src="/app/svg/trash.svg" alt="Delete Task" class="delete-icon"></span>
+        <ul class="tags">
+          {{ range .Tags }}
+          <li>{{ . }}</li>
+          {{ end }}
+        </ul>
+      </li>
+      {{ end }}
+    </ul>
+  </details>
+  {{ end }}
+  <link rel="stylesheet" type="text/css" href="/app/css/index.css">
+  <script src="/app/js/htmx.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+-- +goose Up
+CREATE TABLE IF NOT EXISTS subjects (
+	id TEXT NOT NULL UNIQUE PRIMARY KEY, -- Pattern: sb-#
+    name TEXT NOT NULL UNIQUE,
+	created_at TIMESTAMPTZ NOT NULL UNIQUE,
+	updated_at TIMESTAMPTZ NOT NULL UNIQUE
+);
+
+ALTER TABLE subjects
+ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP,
+ALTER COLUMN updated_at SET DEFAULT CURRENT_TIMESTAMP + INTERVAL '1 second';
+
+INSERT INTO subjects(id, name) VALUES ('sb-0', 'Negocio');
+-- +goose Down
+DELETE FROM subjects;
+DROP TABLE subjects;
