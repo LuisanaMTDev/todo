@@ -21,6 +21,24 @@ p {
   padding: 5px;
 }
 
+/* Media query para móviles */
+@media (max-width: 600px) {
+  .subjects {
+    min-width: unset;
+    /* Eliminar el min-width fijo */
+    width: 100%;
+    /* Usar todo el ancho disponible */
+    max-width: calc(100vw - 20px);
+    /* Evitar overflow horizontal */
+  }
+
+  body {
+    gap: 15px;
+    /* Reducir gap para ahorrar espacio */
+    padding: 5px;
+  }
+}
+
 summary {
   display: flex;
   justify-content: space-between;
@@ -48,7 +66,6 @@ summary {
   gap: 0.5rem;
   color: saddlebrown;
   flex-wrap: wrap;
-  max-width: 100px;
   margin-block: 5px;
 }
 
@@ -67,6 +84,15 @@ summary {
   padding: 0.25rem;
 }
 
+.subjects .tasks {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  /* Opcional: quitar bullets si no los necesitas */
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .task {
   gap: 0.75rem;
   background-color: whitesmoke;
@@ -74,6 +100,29 @@ summary {
   width: max-content;
   padding-inline: 5px;
   margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+/* Media query para móviles */
+@media (max-width: 600px) {
+  .task {
+    width: 100%;
+    /* Cambiar a ancho completo */
+    max-width: 100%;
+    /* Asegurar que no exceda el contenedor */
+    word-wrap: break-word;
+    /* Romper palabras largas si es necesario */
+    overflow-wrap: break-word;
+    /* Mejor soporte para navegadores */
+    display: flex;
+    justify-content: center;
+  }
+
+  .subjects .tasks {
+    width: 100%;
+    overflow: hidden;
+    /* Evitar overflow horizontal */
+  }
 }
 
 .task-description {
