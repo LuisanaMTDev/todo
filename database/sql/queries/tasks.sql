@@ -33,6 +33,10 @@ SELECT id FROM tasks
 ORDER BY created_at DESC
 LIMIT 1;
 
+-- name: GetTaskByID :one
+SELECT * FROM tasks
+WHERE id = $1;
+
 -- name: DeleteTask :exec
 DELETE FROM tasks WHERE id = $1;
 

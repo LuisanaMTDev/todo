@@ -177,5 +177,92 @@ func main() {
 		w.WriteHeader(http.StatusCreated)
 	})
 
+	handler.HandleFunc("PUT /change-state", func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			log.Printf("Error decoding request body: %s", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			// TODO: Return some html indicating the error that occurs and what the user can do next.
+			return
+		}
+
+		_, err = serverConfig.DbConnection.ModifyTaskState(r.Context(), gosql_queries.ModifyTaskStateParams{
+			ID:    r.FormValue("task_id"),
+			State: r.FormValue("state"),
+		})
+		if err != nil {
+			log.Printf("Error modifing task's state: %s", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			// TODO: Return some html indicating the error that occurs and what the user can do next.
+			return
+		}
+
+		w.WriteHeader(http.StatusNoContent)
+	})
+
+	handler.HandleFunc("GET /change-description", func(w http.ResponseWriter, r *http.Request) {
+		tmpl := template.Must(template.ParseFiles("./frontend/templates/tasks.go.html"))
+		tmpl.ExecuteTemplate(w, "ChangeTasksDescription", "")
+	})
+
+	handler.HandleFunc("PUT /change-description", func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			log.Printf("Error decoding request body: %s", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			// TODO: Return some html indicating the error that occurs and what the user can do next.
+			return
+		}
+
+		_, err := serverConfig.DbConnection.ModifyTaskDescription(r.Context(), gosql_queries.ModifyTaskDescriptionParams{
+			ID:          r.FormValue("task_id"),
+			Description: r.FormValue("new_description"),
+		})
+		if err != nil {
+			log.Printf("Error modifing task's description : %s", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			// TODO: Return some html indicating the error that occurs and what the user can do next.
+			return
+		}
+
+		tmpl := template.Must(template.ParseFiles("./frontend/templates/tasks.go.html"))
+		tmpl.ExecuteTemplate(w, "NewDescription", r.FormValue("new_description"))
+	})
+
+	handler.HandleFunc("GET /change-due-date", func(w http.ResponseWriter, r *http.Request) {
+
+		tmpl := template.Must(template.ParseFiles("./frontend/templates/tasks.go.html"))
+		tmpl.ExecuteTemplate(w, "ChangeDueDate", "")
+	})
+
+	handler.HandleFunc("PUT /change-due-date", func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			log.Printf("Error decoding request body: %s", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			// TODO: Return some html indicating the error that occurs and what the user can do next.
+			return
+		}
+
+		_, err := serverConfig.DbConnection.ModifyTaskDueDate(r.Context(), gosql_queries.ModifyTaskDueDateParams{
+			ID:          r.FormValue("task_id"),
+			ToTimestamp: r.FormValue("new_due_date"),
+		})
+		if err != nil {
+			log.Printf("Error modifing task's due date: %s", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			// TODO: Return some html indicating the error that occurs and what the user can do next.
+			return
+		}
+
+		task, err := serverConfig.DbConnection.GetTaskByID(r.Context(), r.FormValue("task_id"))
+		if err != nil {
+			log.Printf("Error while getting task: %s", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			// TODO: Return some html indicating the error that occurs and what the user can do next.
+			return
+		}
+
+		tmpl := template.Must(template.ParseFiles("./frontend/templates/tasks.go.html"))
+		tmpl.ExecuteTemplate(w, "NewDueDate", task.DueDate)
+	})
+
 	log.Fatal(server.ListenAndServe())
 }

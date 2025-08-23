@@ -129,6 +129,27 @@ func (q *Queries) GetLastTaskID(ctx context.Context) (string, error) {
 	return id, err
 }
 
+const getTaskByID = `-- name: GetTaskByID :one
+SELECT id, description, state, due_date, subject_id, tags, created_at, updated_at FROM tasks
+WHERE id = $1
+`
+
+func (q *Queries) GetTaskByID(ctx context.Context, id string) (Task, error) {
+	row := q.db.QueryRowContext(ctx, getTaskByID, id)
+	var i Task
+	err := row.Scan(
+		&i.ID,
+		&i.Description,
+		&i.State,
+		&i.DueDate,
+		&i.SubjectID,
+		pq.Array(&i.Tags),
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const modifyTaskDescription = `-- name: ModifyTaskDescription :execrows
 UPDATE tasks SET
 description = $2,

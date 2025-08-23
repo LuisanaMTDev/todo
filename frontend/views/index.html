@@ -20,19 +20,21 @@
       {{ $tasks := index $.TasksBySubject .ID }}
       {{ range $tasks }}
       <li class="task" id="{{ .ID }}">
-        <p class="task-description">{{ .Description }}</p>
-        <p class="due-date">Due date: {{ .DueDate.Format "02/01/2006 03:04 PM" }}</p>
-        <select class="state utils">
+        <input type="hidden" name="task_id" value="{{ .ID }}">
+        <p class="task-description" hx-get="/change-description" hx-swap="outerHTML">{{ .Description }}</p>
+        <p class="due-date" hx-get="/change-due-date" hx-swap="outerHTML">
+          Due date: {{ .DueDate.Format "02/01/2006 03:04 PM" }}
+        </p>
+        <select class="state utils" name="state" hx-put="/change-state" hx-include="previous input[name='task_id']">
           <option value="not_started" {{ if eq .State "not_started" }}selected{{end}}></option>
           <option value="started" {{ if eq .State "started" }}selected{{end}}>\</option>
           <option value="done" {{ if eq .State "done" }}selected{{end}}>X</option>
         </select>
-        <span class="utils"><img src="/app/svg/pencil.svg" alt="Edit Task"></span>
-        <span><img src="/app/svg/trash.svg" alt="Delete Task" class="delete-icon"></span>
         <ul class="tags">
           {{ range .Tags }}
           <li>{{ . }}</li>
           {{ end }}
+          <span><img src="/app/svg/trash.svg" alt="Delete Task" class="delete-icon"></span>
         </ul>
       </li>
       {{ end }}
