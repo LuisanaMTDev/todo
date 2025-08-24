@@ -81,12 +81,12 @@ func main() {
 		tmpl.Execute(w, data)
 	})
 
-	handler.HandleFunc("GET /add-subject", func(w http.ResponseWriter, r *http.Request) {
+	handler.HandleFunc("GET /subject/add", func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("./frontend/templates/subjects.go.html"))
 		tmpl.ExecuteTemplate(w, "AddSubject", "")
 	})
 
-	handler.HandleFunc("POST /add-subject", func(w http.ResponseWriter, r *http.Request) {
+	handler.HandleFunc("POST /subject/add", func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
 			log.Printf("Error decoding request body: %s", err)
 			w.WriteHeader(http.StatusInternalServerError)
@@ -126,12 +126,12 @@ func main() {
 		w.Header().Add("Hx-Redirect", "/")
 	})
 
-	handler.HandleFunc("GET /add-task", func(w http.ResponseWriter, r *http.Request) {
+	handler.HandleFunc("GET /task/add", func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("./frontend/templates/tasks.go.html"))
 		tmpl.ExecuteTemplate(w, "AddTasks", "")
 	})
 
-	handler.HandleFunc("POST /add-task", func(w http.ResponseWriter, r *http.Request) {
+	handler.HandleFunc("POST /task/add", func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
 			log.Printf("Error decoding request body: %s", err)
 			w.WriteHeader(http.StatusInternalServerError)
@@ -175,7 +175,7 @@ func main() {
 		w.Header().Add("Hx-Redirect", "/")
 	})
 
-	handler.HandleFunc("PUT /change-state", func(w http.ResponseWriter, r *http.Request) {
+	handler.HandleFunc("PUT /task/state", func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
 			log.Printf("Error decoding request body: %s", err)
 			w.WriteHeader(http.StatusInternalServerError)
@@ -197,12 +197,12 @@ func main() {
 		w.WriteHeader(http.StatusNoContent)
 	})
 
-	handler.HandleFunc("GET /change-description", func(w http.ResponseWriter, r *http.Request) {
+	handler.HandleFunc("GET /task/description", func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("./frontend/templates/tasks.go.html"))
 		tmpl.ExecuteTemplate(w, "ChangeTasksDescription", "")
 	})
 
-	handler.HandleFunc("PUT /change-description", func(w http.ResponseWriter, r *http.Request) {
+	handler.HandleFunc("PUT /task/description", func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
 			log.Printf("Error decoding request body: %s", err)
 			w.WriteHeader(http.StatusInternalServerError)
@@ -225,13 +225,13 @@ func main() {
 		tmpl.ExecuteTemplate(w, "NewDescription", r.FormValue("new_description"))
 	})
 
-	handler.HandleFunc("GET /change-due-date", func(w http.ResponseWriter, r *http.Request) {
+	handler.HandleFunc("GET /task/due-date", func(w http.ResponseWriter, r *http.Request) {
 
 		tmpl := template.Must(template.ParseFiles("./frontend/templates/tasks.go.html"))
 		tmpl.ExecuteTemplate(w, "ChangeDueDate", "")
 	})
 
-	handler.HandleFunc("PUT /change-due-date", func(w http.ResponseWriter, r *http.Request) {
+	handler.HandleFunc("PUT /task/due-date", func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
 			log.Printf("Error decoding request body: %s", err)
 			w.WriteHeader(http.StatusInternalServerError)
@@ -262,12 +262,12 @@ func main() {
 		tmpl.ExecuteTemplate(w, "NewDueDate", task.DueDate)
 	})
 
-	handler.HandleFunc("GET /subject/change-name", func(w http.ResponseWriter, r *http.Request) {
+	handler.HandleFunc("GET /subject/name", func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("./frontend/templates/subjects.go.html"))
 		tmpl.ExecuteTemplate(w, "ChangeSubjectName", "")
 	})
 
-	handler.HandleFunc("PUT /subject/change-name", func(w http.ResponseWriter, r *http.Request) {
+	handler.HandleFunc("PUT /subject/name", func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
 			log.Printf("Error decoding request body: %s", err)
 			w.WriteHeader(http.StatusInternalServerError)

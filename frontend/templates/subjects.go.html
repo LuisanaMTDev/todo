@@ -3,16 +3,16 @@
   <h2>Agregar una materia o asunto principal</h2>
   <div>
     <label>Nombre: <input type="text" name="name"></label>
-    <button hx-post="/add-subject" hx-target="closest #add-subject-section" hx-swap="delete">Agregar</button>
+    <button hx-post="/subject/add" hx-target="closest #add-subject-section" hx-swap="delete">Agregar</button>
   </div>
 </form>
 {{ end }}
 
 {{ define "ChangeSubjectName" }}
-<input type="text" name="new_name" hx-put="/subject/change-name" hx-trigger="keyup[key=='Enter']"
+<input type="text" name="new_name" hx-put="/subject/name" hx-trigger="keyup[key=='Enter']"
   hx-include="next input[name='subject_id']" hx-swap="outerHTML">
 {{ end }}
 
 {{ define "NewName" }}
-<p class="subject-name" hx-get="/subject/change-name" hx-swap="outerHTML">{{ . }}</p>
+<p class="subject-name" hx-get="/subject/name" hx-swap="outerHTML">{{ . }}</p>
 {{ end }}

@@ -8,26 +8,26 @@
     <option value="done">X</option>
   </select>
   <label>Tags: <input type="text" name="tags"></label>
-  <button hx-post="/add-task" hx-include="previous input[name='subject_id']">Agregar</button>
+  <button hx-post="/task/add" hx-include="previous input[name='subject_id']">Agregar</button>
 </form>
 {{ end }}
 
 {{ define "ChangeTasksDescription"}}
-<input type="text" name="new_description" hx-put="/change-description" hx-trigger="keyup[key=='Enter']"
+<input type="text" name="new_description" hx-put="/task/description" hx-trigger="keyup[key=='Enter']"
   hx-include="previous input[name='task_id']" hx-swap="outerHTML">
 {{ end }}
 
 {{ define "NewDescription"}}
-<p class="task-description" hx-get="/change-description" hx-swap="outerHTML">{{ . }}</p>
+<p class="task-description" hx-get="/task/description" hx-swap="outerHTML">{{ . }}</p>
 {{ end }}
 
 {{ define "ChangeDueDate" }}
-<input type="datetime-local" name="new_due_date" hx-put="/change-due-date" hx-include="previous input[name='task_id']"
+<input type="datetime-local" name="new_due_date" hx-put="/task/due-date" hx-include="previous input[name='task_id']"
   hx-swap="outerHTML">
 {{ end }}
 
 {{ define "NewDueDate" }}
-<p class="task-due-date" hx-get="/change-due-date" hx-swap="outerHTML">
+<p class="task-due-date" hx-get="/task/due-date" hx-swap="outerHTML">
   Due date: {{ .Format "02/01/2006 03:04 PM"}}
 </p>
 {{ end }}
