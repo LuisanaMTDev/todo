@@ -5,3 +5,12 @@
   <button hx-post="/add-subject" hx-target="closest #add-subject-section" hx-swap="delete">Agregar</button>
 </form>
 {{ end }}
+
+{{ define "ChangeSubjectName" }}
+<input type="text" name="new_name" hx-put="/subject/change-name" hx-trigger="keyup[key=='Enter']"
+  hx-include="next input[name='subject_id']" hx-swap="outerHTML">
+{{ end }}
+
+{{ define "NewName" }}
+<p class="subject-name" hx-get="/subject/change-name" hx-swap="outerHTML">{{ . }}</p>
+{{ end }}

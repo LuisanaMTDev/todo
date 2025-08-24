@@ -123,8 +123,7 @@ func main() {
 			return
 		}
 
-		w.Header().Add("Hx-Refresh", "true")
-		w.WriteHeader(http.StatusCreated)
+		w.Header().Add("Hx-Redirect", "/")
 	})
 
 	handler.HandleFunc("GET /add-task", func(w http.ResponseWriter, r *http.Request) {
@@ -173,8 +172,7 @@ func main() {
 			return
 		}
 
-		w.Header().Add("Hx-Refresh", "true")
-		w.WriteHeader(http.StatusCreated)
+		w.Header().Add("Hx-Redirect", "/")
 	})
 
 	handler.HandleFunc("PUT /change-state", func(w http.ResponseWriter, r *http.Request) {
@@ -262,6 +260,70 @@ func main() {
 
 		tmpl := template.Must(template.ParseFiles("./frontend/templates/tasks.go.html"))
 		tmpl.ExecuteTemplate(w, "NewDueDate", task.DueDate)
+	})
+
+	handler.HandleFunc("GET /subject/change-name", func(w http.ResponseWriter, r *http.Request) {
+		tmpl := template.Must(template.ParseFiles("./frontend/templates/subjects.go.html"))
+		tmpl.ExecuteTemplate(w, "ChangeSubjectName", "")
+	})
+
+	handler.HandleFunc("PUT /subject/change-name", func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			log.Printf("Error decoding request body: %s", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			// TODO: Return some html indicating the error that occurs and what the user can do next.
+			return
+		}
+
+		_, err := serverConfig.DbConnection.ModifySubjectName(r.Context(), gosql_queries.ModifySubjectNameParams{
+			ID:   r.FormValue("subject_id"),
+			Name: r.FormValue("new_name"),
+		})
+		if err != nil {
+			log.Printf("Error modifing task's due date: %s", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			// TODO: Return some html indicating the error that occurs and what the user can do next.
+			return
+		}
+
+		tmpl := template.Must(template.ParseFiles("./frontend/templates/subjects.go.html"))
+		tmpl.ExecuteTemplate(w, "NewName", r.FormValue("new_name"))
+	})
+
+	handler.HandleFunc("DELETE /task/delete", func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			log.Printf("Error decoding request body: %s", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			// TODO: Return some html indicating the error that occurs and what the user can do next.
+			return
+		}
+
+		err = serverConfig.DbConnection.DeleteTask(r.Context(), r.FormValue("task_id"))
+		if err != nil {
+			log.Printf("Error while deleting task: %s", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Add("Hx-Redirect", "/")
+	})
+
+	handler.HandleFunc("DELETE /subject/delete", func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			log.Printf("Error decoding request body: %s", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			// TODO: Return some html indicating the error that occurs and what the user can do next.
+			return
+		}
+
+		_, err = serverConfig.DbConnection.DeleteSubject(r.Context(), r.FormValue("subject_id"))
+		if err != nil {
+			log.Printf("Error while deleting subject: %s", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Add("Hx-Redirect", "/")
 	})
 
 	log.Fatal(server.ListenAndServe())

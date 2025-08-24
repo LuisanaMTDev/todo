@@ -12,11 +12,15 @@
   {{ range .Subjects }}
   <details class="subjects">
     <summary id="{{ .ID }}">
-      <p class="subject-name">{{ .Name }}</p>
-      <button class="add-task" hx-get="/add-task" hx-target="next ul" hx-swap="beforebegin">+</button>
+      <p class="subject-name" hx-get="/subject/change-name" hx-swap="outerHTML">{{ .Name }}</p>
+      <div>
+        <button class="add-task" hx-get="/add-task" hx-target="next ul" hx-swap="beforebegin">+</button>
+        <span hx-delete="/subject/delete" hx-include="next input[name='subject_id']"><img src="/app/svg/trash.svg"
+            alt="Delete Task" class="delete-icon"></span>
+      </div>
     </summary>
     <input type="hidden" name="subject_id" value="{{ .ID }}">
-    <ul class="tasks">
+    <ul class="tasks" id="{{ .ID }}">
       {{ $tasks := index $.TasksBySubject .ID }}
       {{ range $tasks }}
       <li class="task" id="{{ .ID }}">
@@ -34,8 +38,10 @@
           {{ range .Tags }}
           <li>{{ . }}</li>
           {{ end }}
-          <span><img src="/app/svg/trash.svg" alt="Delete Task" class="delete-icon"></span>
         </ul>
+        <span hx-delete="/task/delete" hx-include="previous input[name='task_id'], previous input[name='subject_id']">
+          <img src="/app/svg/trash.svg" alt="Delete Task" class="delete-icon">
+        </span>
       </li>
       {{ end }}
     </ul>
