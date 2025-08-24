@@ -1,142 +1,118 @@
 body {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 25px;
-}
-
-p {
-  margin: 0px;
+  gap: 1rem;
 }
 
 .add-subject {
-  font-size: 1.25rem;
+  width: fit-content;
+  align-self: center;
 }
 
-.subjects {
-  min-width: 500px;
-  width: max-content;
-  background-color: lightgrey;
+#add-subject-section {
+  display: flex;
+  flex-direction: column;
+  background-color: whitesmoke;
   border-radius: 5px;
-  padding: 5px;
+  padding: 1rem;
 }
 
-/* Media query para móviles */
-@media (max-width: 600px) {
-  .subjects {
-    min-width: unset;
-    /* Eliminar el min-width fijo */
-    width: 100%;
-    /* Usar todo el ancho disponible */
-    max-width: calc(100vw - 20px);
-    /* Evitar overflow horizontal */
-  }
+#add-subject-section h2 {
+  text-align: center;
+  margin-top: 0;
+}
 
-  body {
-    gap: 15px;
-    /* Reducir gap para ahorrar espacio */
-    padding: 5px;
-  }
+#add-subject-section div {
+  align-self: center;
+}
+
+.subject {
+  background-color: lightgray;
+  border-radius: 5px;
+  align-self: center;
 }
 
 summary {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding-inline: 0.5rem;
+  width: 97vw;
 }
 
 .subject-name {
-  display: inline;
+  margin-left: 0.5rem;
 }
 
-.add-task {
-  font-size: 1.1rem;
-}
-
-.tags,
-.task {
+.utils {
   display: flex;
   align-items: center;
-}
-
-.tags {
-  list-style-type: none;
-  padding: 0px;
   gap: 0.5rem;
-  color: saddlebrown;
+  margin-right: 0.25rem;
+}
+
+ul {
+  padding: 0;
+}
+
+#add-task-section {
   flex-wrap: wrap;
-  margin-block: 5px;
-}
-
-.tags li {
-  background-color: burlywood;
-  padding-inline: 5px;
-  width: max-content;
-  border-radius: 5px;
-}
-
-.state {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 1.25rem;
+  justify-content: center;
   padding: 0.25rem;
 }
 
-.subjects .tasks {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  /* Opcional: quitar bullets si no los necesitas */
-  width: 100%;
-  box-sizing: border-box;
+.tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .task {
-  gap: 0.75rem;
   background-color: whitesmoke;
+  display: flex;
   border-radius: 5px;
-  width: max-content;
-  padding-inline: 5px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
-
-/* Media query para móviles */
-@media (max-width: 600px) {
-  .task {
-    width: 100%;
-    /* Cambiar a ancho completo */
-    max-width: 100%;
-    /* Asegurar que no exceda el contenedor */
-    word-wrap: break-word;
-    /* Romper palabras largas si es necesario */
-    overflow-wrap: break-word;
-    /* Mejor soporte para navegadores */
-    display: flex;
-    justify-content: center;
-  }
-
-  .subjects .tasks {
-    width: 100%;
-    overflow: hidden;
-    /* Evitar overflow horizontal */
-  }
+  margin-inline: 0.5rem;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .task-description {
-  max-width: 200px;
-  text-wrap: pretty;
-  padding: 5px;
+  margin-left: 0.5rem;
 }
 
-.delete-icon {
-  margin-top: 2px;
-}
-
-.due-date {
-  border: solid 2px lightcoral;
-  padding-inline: 5px;
+.task-due-date {
+  background-color: burlywood;
+  padding: 0.25rem;
   border-radius: 5px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.tags li {
+  list-style-type: none;
+  color: mediumblue;
+  background-color: lightblue;
+  padding: 0.25rem;
+  border-radius: 5px;
+}
+
+.delete {
+  margin-right: 0.5rem;
+}
+
+#edit-tags-section {
+  align-self: center;
+}
+
+@media (min-width: 601px) {
+  .subject {
+    width: 650px;
+  }
+
+  #add-subject-section {
+    width: fit-content;
+    align-self: center;
+  }
 }

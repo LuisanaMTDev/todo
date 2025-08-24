@@ -1,13 +1,13 @@
 {{ define "AddTasks" }}
 <form id="add-task-section" class="task">
-  <input type="text" name="description">
-  <input type="datetime-local" name="due_date">
+  <label>Descripción: <input type="text" name="description"></label>
+  <label>Due date: <input type="datetime-local" name="due_date"></label>
   <select class="state" name="state">
     <option value="not_started"></option>
     <option value="started">\</option>
     <option value="done">X</option>
   </select>
-  <input type="text" name="tags">
+  <label>Tags: <input type="text" name="tags"></label>
   <button hx-post="/add-task" hx-include="previous input[name='subject_id']">Agregar</button>
 </form>
 {{ end }}
@@ -27,7 +27,7 @@
 {{ end }}
 
 {{ define "NewDueDate" }}
-<p class="due-date" hx-get="/change-due-date" hx-swap="outerHTML">
+<p class="task-due-date" hx-get="/change-due-date" hx-swap="outerHTML">
   Due date: {{ .Format "02/01/2006 03:04 PM"}}
 </p>
 {{ end }}

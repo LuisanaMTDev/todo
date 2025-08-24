@@ -1,8 +1,10 @@
 {{ define "AddSubject" }}
 <form id="add-subject-section">
   <h2>Agregar una materia o asunto principal</h2>
-  <label>Nombre: <input type="text" name="name"></label>
-  <button hx-post="/add-subject" hx-target="closest #add-subject-section" hx-swap="delete">Agregar</button>
+  <div>
+    <label>Nombre: <input type="text" name="name"></label>
+    <button hx-post="/add-subject" hx-target="closest #add-subject-section" hx-swap="delete">Agregar</button>
+  </div>
 </form>
 {{ end }}
 
