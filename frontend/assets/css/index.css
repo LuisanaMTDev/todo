@@ -115,4 +115,8 @@ ul {
     width: fit-content;
     align-self: center;
   }
+
+  summary {
+    width: 650px;
+  }
 }

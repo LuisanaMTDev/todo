@@ -1,0 +1,8 @@
+{{ define "EditOptions" }}
+<form id="edit-tags-section">
+  <label><img src="/app/svg/trash.svg" alt="Delete tag"><input type="text" name="tag_to_delete" hx-delete="/tags/delete"
+      hx-include="previous input[name='task_id']"></label>
+  <label><img src="/app/svg/plus.svg" alt="Add tag"><input type="text" name="tag_to_add" hx-put="/tags/add"
+      hx-include="previous input[name='task_id']"></label>
+</form>
+{{ end }}
