@@ -22,8 +22,13 @@
 {{ end }}
 
 {{ define "ChangeDueDate" }}
-<input type="datetime-local" name="new_due_date" hx-put="/task/due-date" hx-include="previous input[name='task_id']"
-  hx-swap="outerHTML">
+<input type="datetime-local"
+  name="new_due_date"
+  hx-put="/task/due-date"
+  hx-include="previous input[name='task_id']"
+  hx-swap="outerHTML"
+  hx-trigger="blur"
+>
 {{ end }}
 
 {{ define "NewDueDate" }}
