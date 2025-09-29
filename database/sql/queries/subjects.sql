@@ -1,13 +1,13 @@
 -- name: AddSubject :exec
 INSERT INTO subjects (
 	id, name
-) VALUES ( $1, $2 );
+) VALUES ( ?, ? );
 
 -- name: ModifySubjectName :execrows
 UPDATE subjects SET
-name = $2,
-updated_at = CURRENT_TIMESTAMP
-WHERE id = $1;
+name = ?,
+updated_at = datetime('now', 'localtime')
+WHERE id = ?;
 
 -- name: GetAllSubjects :many
 SELECT * FROM subjects;
@@ -18,4 +18,4 @@ ORDER BY created_at DESC
 LIMIT 1;
 
 -- name: DeleteSubject :execrows
-DELETE FROM subjects WHERE id = $1;
+DELETE FROM subjects WHERE id = ?;
