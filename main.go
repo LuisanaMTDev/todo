@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	_ "github.com/lib/pq"
 
@@ -160,7 +159,6 @@ func main() {
 			Description: r.FormValue("description"),
 			ToTimestamp: r.FormValue("due_date"),
 			State:       r.FormValue("state"),
-			Tags:        strings.Split(r.FormValue("tags"), ", "),
 			SubjectID:   r.FormValue("subject_id"),
 		}
 
@@ -241,7 +239,7 @@ func main() {
 
 		_, err := serverConfig.DbConnection.ModifyTaskDueDate(r.Context(), gosql_queries.ModifyTaskDueDateParams{
 			ID:          r.FormValue("task_id"),
-			ToTimestamp: r.FormValue("new_due_date"),
+			Datetime: r.FormValue("new_due_date"),
 		})
 		if err != nil {
 			log.Printf("Error modifing task's due date: %s", err)
@@ -329,48 +327,6 @@ func main() {
 	handler.HandleFunc("GET /tags/edit", func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("./frontend/templates/tags.go.html"))
 		tmpl.ExecuteTemplate(w, "EditOptions", "")
-	})
-
-	handler.HandleFunc("DELETE /tags/delete", func(w http.ResponseWriter, r *http.Request) {
-		if err := r.ParseForm(); err != nil {
-			log.Printf("Error decoding request body: %s", err)
-			w.WriteHeader(http.StatusInternalServerError)
-			// TODO: Return some html indicating the error that occurs and what the user can do next.
-			return
-		}
-
-		err = serverConfig.DbConnection.DeleteTag(r.Context(), gosql_queries.DeleteTagParams{
-			ID:          r.FormValue("task_id"),
-			ArrayRemove: r.FormValue("tag_to_delete"),
-		})
-		if err != nil {
-			log.Printf("Error while deleting tag: %s", err)
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-
-		w.Header().Add("Hx-Redirect", "/")
-	})
-
-	handler.HandleFunc("PUT /tags/add", func(w http.ResponseWriter, r *http.Request) {
-		if err := r.ParseForm(); err != nil {
-			log.Printf("Error decoding request body: %s", err)
-			w.WriteHeader(http.StatusInternalServerError)
-			// TODO: Return some html indicating the error that occurs and what the user can do next.
-			return
-		}
-
-		err = serverConfig.DbConnection.AddTag(r.Context(), gosql_queries.AddTagParams{
-			ID:          r.FormValue("task_id"),
-			ArrayAppend: r.FormValue("tag_to_add"),
-		})
-		if err != nil {
-			log.Printf("Error while adding tag: %s", err)
-			w.WriteHeader(http.StatusInternalServerError)
-			return
-		}
-
-		w.Header().Add("Hx-Redirect", "/")
 	})
 
 	log.Fatal(server.ListenAndServe())
