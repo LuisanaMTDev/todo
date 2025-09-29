@@ -7,7 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	_ "github.com/lib/pq"
+	// _ "modernc.org/sqlite"
+	_ "github.com/tursodatabase/libsql-client-go/libsql"
 
 	"github.com/LuisanaMTDev/todo/database/gosql_queries"
 	"github.com/joho/godotenv"
@@ -21,19 +22,23 @@ type config struct {
 func main() {
 	godotenv.Load()
 	platform := os.Getenv("PLATFORM")
-	var dbURL string
+	var db *sql.DB
+		var err error
 
 	if platform == "PROD" {
-		dbURL = os.Getenv("DB_URL_PROD")
+		dbURL := os.Getenv("DB_URL_PROD")
+		db, err = sql.Open("libsql", dbURL)
+		if err != nil {
+			log.Printf("Error while opening db: %v", err)
+			return
+		}
 	} else {
-		dbURL = os.Getenv("DB_URL_DEV")
-	}
-
-	db, err := sql.Open("postgres", dbURL)
-
-	if err != nil {
-		log.Printf("Error while opening db: %v", err)
-		return
+		dbURL := os.Getenv("DB_URL_DEV")
+		db, err = sql.Open("sqlite", dbURL)
+		if err != nil {
+			log.Printf("Error while opening db: %v", err)
+			return
+		}
 	}
 
 	dbQueries := gosql_queries.New(db)
@@ -157,7 +162,7 @@ func main() {
 		newTaskData := gosql_queries.AddTaskParams{
 			ID:          newTaskID,
 			Description: r.FormValue("description"),
-			ToTimestamp: r.FormValue("due_date"),
+			Datetime: r.FormValue("due_date"),
 			State:       r.FormValue("state"),
 			SubjectID:   r.FormValue("subject_id"),
 		}
