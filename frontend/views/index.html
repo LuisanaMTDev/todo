@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/app/css/index.css">
   <title>Todo</title>
 </head>
 
@@ -34,11 +35,6 @@
           <option value="started" {{ if eq .State "started" }}selected{{end}}>\</option>
           <option value="done" {{ if eq .State "done" }}selected{{end}}>X</option>
         </select>
-        <ul class="tags" hx-get="/tags/edit" hx-swap="afterend" hx-target="#{{ .ID }}">
-          {{ range .Tags }}
-          <li>{{ . }}</li>
-          {{ end }}
-        </ul>
         <span class="delete" hx-delete="/task/delete"
           hx-include="previous input[name='task_id'], previous input[name='subject_id']">
           <img src="/app/svg/trash.svg" alt="Delete Task" class="delete-icon">
@@ -48,7 +44,6 @@
     </ul>
   </details>
   {{ end }}
-  <link rel="stylesheet" type="text/css" href="/app/css/index.css">
   <script src="/app/js/htmx.min.js"></script>
 </body>
 

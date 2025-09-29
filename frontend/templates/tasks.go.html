@@ -7,7 +7,6 @@
     <option value="started">\</option>
     <option value="done">X</option>
   </select>
-  <label>Tags: <input type="text" name="tags"></label>
   <button hx-post="/task/add" hx-include="previous input[name='subject_id']">Agregar</button>
 </form>
 {{ end }}
