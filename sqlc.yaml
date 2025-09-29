@@ -2,7 +2,7 @@ version: '2'
 sql:
   - schema: "database/sql/schema"
     queries: "database/sql/queries"
-    engine: "postgresql"
+    engine: "sqlite"
     gen:
       go:
         out: "database/gosql_queries"
